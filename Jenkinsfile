@@ -7,7 +7,7 @@ def loadProperties(def jobname) {
         properties = new Properties()
         File propertiesFile = new File("${workspace}/${jobname}.properties")
         properties.load(propertiesFile.newDataInputStream())
-        //echo "Immediate one ${properties.test}"
+        echo "Immediate one ${properties.slavenode}"
     
 }
 node{
