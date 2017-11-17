@@ -1,4 +1,5 @@
 properties = null
+container_id = null
 
 //load pipeline properties
 def loadProperties(jobname) {
@@ -7,8 +8,7 @@ def loadProperties(jobname) {
         properties = new Properties()
         File propertiesFile = new File("${workspace}/"+jobname+".properties")
         properties.load(propertiesFile.newDataInputStream())
-        echo "2Immediate one ${properties.slavenode}"
-    
+           
 }
 node{
     stage 'Set Up'
@@ -30,8 +30,8 @@ node("${properties.slavenode}"){
       step([$class: 'DockerBuilderPublisher', cleanImages: false, cleanupWithJenkinsJobDelete: false, cloud: 'Docker Colony 2', dockerFileDirectory: '', pullCredentialsId: '', pushCredentialsId: '', pushOnSuccess: true, tagsString: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}"])
     
     stage 'Deploy Application'
-      step([$class: 'DockerBuilderControl', option: [ $class: 'DockerBuilderControlOptionRun' , cloudName: 'Docker Colony 2' ,image: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}" ,bindPorts: '9000:4200']])
-  
+      container_id=step([$class: 'DockerBuilderControl', option: [ $class: 'DockerBuilderControlOptionRun' , cloudName: 'Docker Colony 2' ,image: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}" ,bindPorts: '9000:4200']])
+      echo "ZZZZZZ"+container_id  
 }
                
 
