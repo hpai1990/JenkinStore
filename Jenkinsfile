@@ -5,8 +5,7 @@ def loadProperties(jobname) {
     
         checkout scm
         properties = new Properties()
-        echo "1Immediate one ${properties.slavenode}"
-        File propertiesFile = new File("${workspace}/jobname.properties")
+        File propertiesFile = new File("${workspace}/"+jobname+".properties")
         properties.load(propertiesFile.newDataInputStream())
         echo "2Immediate one ${properties.slavenode}"
     
