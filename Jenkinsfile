@@ -1,11 +1,11 @@
 properties = null
 
 //load pipeline properties
-def loadProperties(def jobname) {
+def loadProperties(jobname) {
     
         checkout scm
         properties = new Properties()
-        File propertiesFile = new File("${workspace}/${jobname}.properties")
+        File propertiesFile = new File("${workspace}/jobname.properties")
         properties.load(propertiesFile.newDataInputStream())
         echo "Immediate one ${properties.slavenode}"
     
