@@ -1,7 +1,7 @@
 properties = null
 
 //load pipeline properties
-def loadProperties(jobname) {
+def loadProperties(def jobname) {
     
         checkout scm
         properties = new Properties()
