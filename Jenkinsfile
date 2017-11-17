@@ -11,7 +11,8 @@ def loadProperties(def jobname) {
     
 }
 node{
-    stage 'Set Up' 
+    stage 'Set Up'
+    echo "test step"
     loadProperties(${JOB_NAME})
       
 }
