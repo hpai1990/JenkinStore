@@ -11,14 +11,8 @@ def loadProperties() {
     
 }
 node{
-    stage ('prepare') {
-            
-
-            steps {
-                script {
-                    loadProperties()
-                    echo "Later one ${properties.test}"
-                }
-            }
-        }
+    stage 'prepare' 
+      loadProperties()
+      echo "Later one ${properties.test}"
+               
 }
