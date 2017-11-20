@@ -14,6 +14,7 @@ node{
     stage 'Set Up'
     echo "test step"
     loadProperties("${JOB_NAME}")
+    sh 'whoami'
     sh 'docker ps -a --filter "ancestor=tfangularapp"'  
       
 }
