@@ -1,5 +1,5 @@
 properties = null
-container_id = null
+env.container_id = null
 
 //load pipeline properties
 def loadProperties(jobname) {
@@ -15,11 +15,11 @@ node{
     echo "test step"
     loadProperties("${JOB_NAME}")
     sh 'docker ps | grep "tfangularapp" | awk \'{ print $1 }\' > commandResult'
-    container_id = readFile('commandResult').trim()
-    echo "Container id is : ${container_id}"
+    env.container_id = readFile('commandResult').trim()
+    echo "Container id is : ${env.container_id}"
     sh '''
-      echo "$container_id"  
-      if [ "$container_id" != "" ] ; then
+      echo "${env.container_id}"  
+      if [ "${env.container_id}" != "" ] ; then
          docker rm -f ${container_id}
       fi
       '''
