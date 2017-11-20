@@ -37,13 +37,17 @@ node("${properties.slavenode}"){
       sh '''
       if [ "${JOB_NAME}" = "uipipeline" ] ; then
          zip -r app.zip .
+      elif [ "${JOB_NAME}" = "apppipeline" ] : then
+         mvn install
+      else
+         echo "No Build tasks"   
       fi
       '''
     stage 'Docker Build and Publish'
       step([$class: 'DockerBuilderPublisher', cleanImages: false, cleanupWithJenkinsJobDelete: false, cloud: 'Docker Colony 2', dockerFileDirectory: '', pullCredentialsId: '', pushCredentialsId: '', pushOnSuccess: true, tagsString: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}"])
     
     stage 'Deploy Application'
-      container_id=step([$class: 'DockerBuilderControl', option: [ $class: 'DockerBuilderControlOptionRun' , cloudName: 'Docker Colony 2' ,image: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}" ,bindPorts: '9000:4200']])
+      container_id=step([$class: 'DockerBuilderControl', option: [ $class: 'DockerBuilderControlOptionRun' , cloudName: 'Docker Colony 2' ,image: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}" ,bindPorts: "${properties.port_bindings}"]])
       
 }               
 
