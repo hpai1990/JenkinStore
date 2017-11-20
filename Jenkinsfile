@@ -16,7 +16,7 @@ node{
     loadProperties("${JOB_NAME}")
     //sh 'docker ps | grep "tfangularapp" | awk \'{ print $1 }\' > commandResult'
     
-    sh '''#!/bin/bash
+    sh """#!/bin/bash
       echo "Check for existing containers"  
       container_id=`docker ps | grep "${properties.docker_image_name}" | awk '{ print $1 }'`
         
@@ -25,7 +25,7 @@ node{
          docker rm -f $container_id
          echo "Exisitng container has been removed"
       fi
-      '''
+      """
       
 }
 
