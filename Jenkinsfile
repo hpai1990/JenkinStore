@@ -37,7 +37,7 @@ node("${properties.slavenode}"){
       sh '''
       if [ "${JOB_NAME}" = "uipipeline" ] ; then
          zip -r app.zip .
-      elif [ "${JOB_NAME}" = "apppipeline" ] : then
+      elif [ "${JOB_NAME}" = "apppipeline" ] ; then
          mvn install
       else
          echo "No Build tasks"   
