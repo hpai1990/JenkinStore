@@ -14,6 +14,7 @@ node{
     stage 'Set Up'
     echo "test step"
     loadProperties("${JOB_NAME}")
+    sh 'docker ps -a --filter "ancestor=tfangularapp"'  
       
 }
 node("${properties.slavenode}"){
@@ -31,7 +32,7 @@ node("${properties.slavenode}"){
     
     stage 'Deploy Application'
       container_id=step([$class: 'DockerBuilderControl', option: [ $class: 'DockerBuilderControlOptionRun' , cloudName: 'Docker Colony 2' ,image: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}" ,bindPorts: '9000:4200']])
-      sh 'docker ps -a --filter "ancestor=tfangularapp"'  
+      
 }
                
 
