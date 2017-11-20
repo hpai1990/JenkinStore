@@ -17,13 +17,13 @@ node{
     //sh 'docker ps | grep "tfangularapp" | awk \'{ print $1 }\' > commandResult'
     
     sh """#!/bin/bash
-      echo "Check for existing containers"  
-      container_id=`docker ps | grep "${properties.docker_image_name}" | awk '{ print $1 }'`
+      echo \"Check for existing containers\"  
+      container_id=`docker ps | grep \"${properties.docker_image_name}\" | awk '{ print $1 }'`
         
-      if [ "$container_id" != "" ] ; then
-         echo "Existing container id is ${container_id}"   
+      if [ \"$container_id\" != \"\" ] ; then
+         echo \"Existing container id is ${container_id}\"   
          docker rm -f $container_id
-         echo "Exisitng container has been removed"
+         echo \"Exisitng container has been removed\"
       fi
       """
       
