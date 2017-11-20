@@ -18,7 +18,7 @@ node{
     
     sh '''#!/bin/bash
       echo "Check for existing containers"  
-      container_id=`docker ps | grep "tfangularapp" | awk '{ print $1 }'`
+      container_id=`docker ps | grep "${properties.docker_image_name}" | awk '{ print $1 }'`
         
       if [ "$container_id" != "" ] ; then
          echo "Existing container id is ${container_id}"   
