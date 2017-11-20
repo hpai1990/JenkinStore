@@ -14,7 +14,7 @@ node{
     stage 'Set Up'
     echo "test step"
     loadProperties("${JOB_NAME}")
-    container_id = sh 'docker ps | grep "tfangularapp" | awk '{ print $1 }''
+    container_id = sh 'docker ps | grep "tfangularapp" | awk \'{ print $1 }\''
     echo "Container id is : ${container_id}"
       
 }
