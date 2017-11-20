@@ -18,8 +18,8 @@ node{
     container_id = readFile('commandResult').trim()
     echo "Container id is : ${container_id}"
     sh '''
-      echo "${container_id}"  
-      if ["$container_id" != "" ] ; then
+      echo "$container_id"  
+      if [ "$container_id" != "" ] ; then
          docker rm -f ${container_id}
       fi
       '''
