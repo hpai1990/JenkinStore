@@ -17,6 +17,11 @@ node{
     sh 'docker ps | grep "tfangularapp" | awk \'{ print $1 }\' > commandResult'
     container_id = readFile('commandResult').trim()
     echo "Container id is : ${container_id}"
+    sh '''
+      if [ "${container_id}" != "" ] ; then
+         docker rm -f ${container_id}
+      fi
+      '''
       
 }
 
