@@ -14,10 +14,11 @@ node{
     stage 'Set Up'
     echo "test step"
     loadProperties("${JOB_NAME}")
-    sh 'whoami'
-    sh 'docker ps -a --filter "ancestor=tfangularapp"'  
+    container_id = sh 'docker ps | grep "tfangularapp" | awk '{ print $1 }''
+    echo "Container id is : ${container_id}"
       
 }
+
 node("${properties.slavenode}"){
     stage 'Checkout'
  	  checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: "${properties.scm_url}"]]])
@@ -34,6 +35,5 @@ node("${properties.slavenode}"){
     stage 'Deploy Application'
       container_id=step([$class: 'DockerBuilderControl', option: [ $class: 'DockerBuilderControlOptionRun' , cloudName: 'Docker Colony 2' ,image: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}" ,bindPorts: '9000:4200']])
       
-}
-               
+}               
 
