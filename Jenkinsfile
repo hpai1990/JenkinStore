@@ -10,22 +10,26 @@ def loadProperties(jobname) {
         properties.load(propertiesFile.newDataInputStream())
            
 }
+
+def removeContainer(imagename) {
+    sh """#!/bin/bash
+      echo \"Check for existing containers with name ${imagename}\"  
+      container_id=`docker ps | grep \"${imagename}\" | awk '{ print \$1 }'`
+        
+      if [ \"\$container_id\" != \"\" ] ; then
+         echo \"Existing container id is \${container_id}\"   
+         docker rm -f \$container_id
+         echo \"Container has been removed\"
+      fi
+      """
+}
 node{
     stage 'Set Up'
     echo "test step"
     loadProperties("${JOB_NAME}")
     //sh 'docker ps | grep "tfangularapp" | awk \'{ print $1 }\' > commandResult'
+    removeContainer("${properties.docker_image_name}")
     
-    sh """#!/bin/bash
-      echo \"Check for existing containers\"  
-      container_id=`docker ps | grep \"${properties.docker_image_name}\" | awk '{ print \$1 }'`
-        
-      if [ \"\$container_id\" != \"\" ] ; then
-         echo \"Existing container id is \${container_id}\"   
-         docker rm -f \$container_id
-         echo \"Exisitng container has been removed\"
-      fi
-      """
       
 }
 
