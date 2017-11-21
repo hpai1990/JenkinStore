@@ -52,6 +52,14 @@ node("${properties.slavenode}"){
     
     stage 'Deploy Application'
         container_id=step([$class: 'DockerBuilderControl', option: [ $class: 'DockerBuilderControlOptionRun' , cloudName: 'Docker Colony 2' ,image: "${properties.docker_repo}/${properties.docker_image_name}:${BUILD_NUMBER}" ,bindPorts: "${properties.port_bindings}"]])
-      
-}               
+    
+    
+}
+node('mavennode'){
+    stage 'Integration test'
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: "https://github.com/hpai1990/ApiTesting"]]])
+        sh 'mvn install test'
+}
+
+           
 
