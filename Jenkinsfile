@@ -58,8 +58,17 @@ node("${properties.slavenode}"){
 node('mavennode'){
     stage 'Integration test'
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: "https://github.com/NDeeksha/ApiTesting"]]])
-        sh 'mvn install'
-        junit keepLongStdio: true, testResults: 'target/surefire-reports/junitreports/*.xml'
+        try{
+             sh 'mvn install'
+         } 
+        catch (error) {
+             throw error
+        } 
+        finally {
+             junit keepLongStdio: true, testResults: 'target/surefire-reports/junitreports/*.xml'
+        }    
+   
+        
 }
 
            
