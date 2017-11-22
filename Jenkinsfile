@@ -65,7 +65,10 @@ node('mavennode'){
              throw error
         } 
         finally {
+            //test reporting
              junit keepLongStdio: true, testResults: 'target/surefire-reports/junitreports/*.xml'
+             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/surefire-reports', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
+
         }    
    
         
