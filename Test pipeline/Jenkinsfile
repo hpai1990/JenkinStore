@@ -1,4 +1,4 @@
-import groovy.xml.streamingmarkupbuilder
+import groovy.xml.StreamingMarkupBuilder
 def testxml = null
 
 @NonCPS
