@@ -1,6 +1,4 @@
-import groovy.xml.StreamingMarkupBuilder
-import groovy.xml.XmlUtil
-
+import groovy.xml.*
 def testxml = null
 
 @NonCPS
@@ -16,8 +14,40 @@ def generateXML() {
     
         mkp.yieldUnescaped '<?xml version="1.0" encoding="UTF-8"?>\n'
         mkp.yieldUnescaped '<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">'
-        delegate.suite(name:'Suite'){
-            delegate.test(name:'Sample test'){
+        delegate.suite(name:'Suite',parallel:"${params.parallel_execution_mode}",verbose:'1'){
+            if("${params.browser}"=="all"){
+                delegate.test(name:'UI test firefox'){
+                    mkp.yieldUnescaped "<parameter name=\"browser\" value=\"firefox\"/>"
+                    delegate.groups{
+                        delegate.run{
+                        mkp.yieldUnescaped "<include name = \"${params.groups}\" />"
+                        }
+                    }
+                
+                    delegate.classes{
+                        testclasses.eachWithIndex { classname, index ->
+                        mkp.yieldUnescaped "<class name=\"$classname\"/>"
+                        }
+                    }
+                }
+                
+                delegate.test(name:'UI test chrome'){
+                    mkp.yieldUnescaped "<parameter name=\"browser\" value=\"chrome\"/>"
+                    delegate.groups{
+                        delegate.run{
+                        mkp.yieldUnescaped "<include name = \"${params.groups}\" />"
+                        }
+                    }
+                
+                    delegate.classes{
+                        testclasses.eachWithIndex { classname, index ->
+                        mkp.yieldUnescaped "<class name=\"$classname\"/>"
+                        }
+                    }
+                }
+            }
+            else{
+                delegate.test(name:'Sample test'){
                 mkp.yieldUnescaped "<parameter name=\"browser\" value=\"${params.browser}\"/>"
                 delegate.groups{
                     delegate.run{
@@ -31,6 +61,8 @@ def generateXML() {
                     }
                 }
             }
+            }
+            
         }
     }      
 
@@ -40,18 +72,20 @@ return XmlUtil.serialize(writer)
 
 node('mavennode'){
     stage 'Integration test'
-        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: "https://github.com/hpai1990/ApiTesting"]]])
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: 'https://github.com/hpai1990/ApiTesting']]]
         
         testxml=generateXML()
         try{
              sh """#!/bin/bash
                 echo '${testxml}' > src/test/resources/suites/testng.xml
                 cat src/test/resources/suites/testng.xml
+                export TEST_ENVIRONMENT='dev'
+                echo \$TEST_ENVIRONMENT
                 mvn clean install
-                
                 """
          } 
         catch (error) {
+             print error    
              throw error
         } 
         finally {
