@@ -57,18 +57,18 @@ node("${properties.slavenode}"){
 }
 node('mavennode'){
     stage 'Integration test'
-        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: "https://github.com/NDeeksha/ApiTesting"]]])
-        try{
-             sh 'mvn install'
-         } 
-        catch (error) {
-             throw error
-        } 
-        finally {
+        //checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: "https://github.com/NDeeksha/ApiTesting"]]])
+        //try{
+        //     sh 'mvn install'
+        // } 
+        //catch (error) {
+        //     throw error
+        //} 
+        //finally {
             //test reporting
-             junit keepLongStdio: true, testResults: 'target/surefire-reports/junitreports/*.xml'
-             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/surefire-reports', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
-
+        //     junit keepLongStdio: true, testResults: 'target/surefire-reports/junitreports/*.xml'
+        //     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/surefire-reports', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
+        build job: 'TestPipeline', parameters: [string(name: 'TestApplication', value: "${properties.test_application}"), string(name: 'TestType', value: "${properties.test_type}"), string(name: 'TestBrowser', value: "${properties.test_browser}"), string(name: 'parallel_execution_mode', value: "${properties.parallel_execution_mode}"), string(name: 'test_classes', value: "${properties.test_classes}")]
         }    
    
         
