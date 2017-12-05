@@ -69,7 +69,7 @@ node('mavennode'){
         //     junit keepLongStdio: true, testResults: 'target/surefire-reports/junitreports/*.xml'
         //     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/surefire-reports', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
         build job: 'TestPipeline', parameters: [string(name: 'TestApplication', value: "${properties.test_application}"), string(name: 'TestType', value: "${properties.test_type}"), string(name: 'TestBrowser', value: "${properties.test_browser}"), string(name: 'parallel_execution_mode', value: "${properties.parallel_execution_mode}"), string(name: 'test_classes', value: "${properties.test_classes}")]
-        }    
+        //}    
    
         
 }
