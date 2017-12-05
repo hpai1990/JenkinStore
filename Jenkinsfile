@@ -70,9 +70,9 @@ node{
         //     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'target/surefire-reports', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
         build job: 'TestPipeline', parameters: [string(name: 'TestApplication', value: "${properties.test_application}"), string(name: 'TestType', value: "${properties.test_type}"), string(name: 'TestBrowser', value: "${properties.test_browser}"), string(name: 'parallel_execution_mode', value: "${properties.parallel_execution_mode}"), string(name: 'test_classes', value: "${properties.test_classes}")]
         //copyArtifacts filter: 'target/allure-report/*,target/surefire-reports/junitreports/*.xml', fingerprintArtifacts: true, projectName: 'TestPipeline', selector: upstream(allowUpstreamDependencies: false, fallbackToLastSuccessful: false, upstreamFilterStrategy: 'UseGlobalSetting'), target: 'child-artifacts/'    
-        copyArtifacts filter: 'htmlreports/*,junitResult.xml', fingerprintArtifacts: true, projectName: 'TestPipeline', selector: lastSuccessful()    
-        junit keepLongStdio: true, testResults: '/junitResult.xml'
-        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'htmlreports/Integration_Test_Report', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
+        copyArtifacts filter: 'target/allure-report/**,target/surefire-reports/junitreports/*.xml', fingerprintArtifacts: true, projectName: 'TestPipeline', selector: lastSuccessful()    
+        //junit keepLongStdio: true, testResults: '/junitResult.xml'
+        //publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'htmlreports/Integration_Test_Report', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
     //}    
    
         
