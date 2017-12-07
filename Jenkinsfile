@@ -34,10 +34,10 @@ node{
 }
 
 node("${properties.slavenode}"){
-    stage 'Checkout'
+    stage 'Checkout from Github'
  	    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: "${properties.scm_url}"]]])
     
-    stage 'Build'  
+    stage 'Build Project'  
         sh '''
             if [ "${JOB_NAME}" = "uipipeline" ] ; then
                 zip -r app.zip .
@@ -56,7 +56,7 @@ node("${properties.slavenode}"){
     
 }
 node{
-    stage 'Integration test'
+    stage 'Functional test'
         //checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '1ab09c9e-36aa-4285-b73c-7e4d36675372', url: "https://github.com/NDeeksha/ApiTesting"]]])
         //try{
         //     sh 'mvn install'
